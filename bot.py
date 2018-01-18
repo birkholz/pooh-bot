@@ -5,6 +5,7 @@ import asyncio
 from profanity import profanity
 
 client = discord.Client()
+client._strict = False
 
 @client.event
 async def on_ready():
@@ -20,13 +21,37 @@ def get_pooh(server):
     return '💩'
 
 
+def is_admin(member):
+    for role in member.roles:
+        if role.name == 'admin':
+            return True
+    return False
+
+
+async def handle_message(message):
+    if client._strict:
+        await client.delete_message(message)
+        reply =  f'This is a Christian server. No swearing <@{message.author.id}>!'
+        await client.send_message(message.channel, reply)
+    else:
+        await client.add_reaction(message, get_pooh(message.server))
+
+
 @client.event
 async def on_message(message):
     if message.channel.is_private:
         return
 
+    if is_admin(message.author):
+        if message.content.startswith('!strict'):
+            client._strict = not client._strict
+            strict = "on" if client._strict else "off"
+            reply = f'Watch your language kids! Strict mode: {strict}'
+            await client.send_message(message.channel, reply)
+            return
+
     if profanity.contains_profanity(message.content):
-        await client.add_reaction(message, get_pooh(message.server))
+        await handle_message(message)
 
 @client.event
 async def on_message_edit(before, after):
@@ -34,7 +59,7 @@ async def on_message_edit(before, after):
         return
 
     if profanity.contains_profanity(after.content):
-        await client.add_reaction(after, get_pooh(after.server))
+        await handle_message(message)
     elif not profanity.contains_profanity(after.content):
         await client.remove_reaction(after, get_pooh(after.server), after.server.me)
 
