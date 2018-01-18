@@ -31,7 +31,7 @@ def is_admin(member):
 async def handle_message(message):
     if client._strict:
         await client.delete_message(message)
-        reply =  f'This is a Christian server. No swearing <@{message.author.id}>!'
+        reply =  f'Sorry sir, this is a Christian server, so no swearing <@{message.author.id}>.'
         await client.send_message(message.channel, reply)
     else:
         await client.add_reaction(message, get_pooh(message.server))
