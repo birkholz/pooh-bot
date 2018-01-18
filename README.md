@@ -1,6 +1,6 @@
 pooh-bot
 ===
-*A simple Discord bot that helps keep your server family friendly.*
+*A simple Discord bot that helps keep your server [family friendly](meme.jpg).*
 
 ![demo](demo.gif)
 
