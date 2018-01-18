@@ -1,3 +1,5 @@
+import os
+
 import discord
 import asyncio
 from profanity import profanity
