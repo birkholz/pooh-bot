@@ -1,2 +1,1 @@
 discord.py==0.16.12
-profanity==1.1

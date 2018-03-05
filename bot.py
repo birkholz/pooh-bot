@@ -2,7 +2,8 @@ import os
 
 import discord
 import asyncio
-from profanity import profanity
+
+from profanity import contains_profanity
 
 client = discord.Client()
 client._strict = False
@@ -50,7 +51,7 @@ async def on_message(message):
             await client.send_message(message.channel, reply)
             return
 
-    if profanity.contains_profanity(message.content):
+    if contains_profanity(message.content):
         await handle_message(message)
 
 @client.event
@@ -58,9 +59,9 @@ async def on_message_edit(before, after):
     if after.channel.is_private:
         return
 
-    if profanity.contains_profanity(after.content):
+    if contains_profanity(after.content):
         await handle_message(message)
-    elif not profanity.contains_profanity(after.content):
+    elif not contains_profanity(after.content):
         await client.remove_reaction(after, get_pooh(after.server), after.server.me)
 
 client.run(os.environ.get('DISCORD_TOKEN'))
