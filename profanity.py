@@ -5,10 +5,10 @@ profane_words = None
 
 
 def get_profanity():
+    global profane_words
     if not profane_words:
         current_dir = os.path.abspath(os.path.dirname(__file__))
         f = open(os.path.join(current_dir, 'wordlist.txt'))
-        global profane_words
         profane_words = [w.strip() for w in f.readlines() if w]
         profane_words.pop(0) # Remove header line
     return profane_words
